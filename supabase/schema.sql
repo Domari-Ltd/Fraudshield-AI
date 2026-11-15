@@ -47,7 +47,7 @@ CREATE TRIGGER on_auth_user_created
   FOR EACH ROW EXECUTE PROCEDURE public.handle_new_user();
 
 
--- 2. SCAM CHECKS TABLE (Stores scan analysis history)
+-- 2. SCAM CHECKS TABLE (Stores scan analysis history & adaptive image threat memory)
 CREATE TABLE IF NOT EXISTS public.scam_checks (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID REFERENCES public.profiles(id) ON DELETE SET NULL,
@@ -62,6 +62,10 @@ CREATE TABLE IF NOT EXISTS public.scam_checks (
   confidence_level TEXT NOT NULL,
   disclaimer TEXT,
   sources JSONB DEFAULT '[]'::jsonb,
+  has_image BOOLEAN DEFAULT FALSE,
+  extracted_text TEXT,
+  visual_indicators JSONB DEFAULT '[]'::jsonb,
+  decisiveness_factor TEXT,
   created_at TIMESTAMPTZ DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL
 );
 

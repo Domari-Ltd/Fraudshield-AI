@@ -17,6 +17,15 @@ export interface ScamAnalysis {
   recommended_actions: string[];
   sources: string[];
   disclaimer: string;
+  // Multimodal image recognition & OCR fields
+  extracted_text?: string;
+  visual_indicators?: string[];
+  has_image?: boolean;
+  image_preview?: string;
+  // Adaptive threat memory & training telemetry
+  learned_patterns_count?: number;
+  decisiveness_factor?: string;
+  matched_learned_patterns?: string[];
 }
 
 export type MessageType =
@@ -41,17 +50,33 @@ export interface ScamCheckRecord {
   confidenceLevel: string;
   sources: string | null;
   disclaimer: string;
+  hasImage?: boolean;
+  extractedText?: string | null;
+  visualIndicators?: string | null;
+  decisivenessFactor?: string | null;
   createdAt: Date;
 }
 
 export interface AnalyzeRequest {
-  inputText: string;
+  inputText?: string;
+  imageBase64?: string;
+  imageMimeType?: string;
   selectedType?: MessageType;
 }
 
 export interface AnalyzeResponse {
   success: boolean;
-  data?: ScamAnalysis & { id: string };
+  data?: ScamAnalysis & {
+    id: string;
+    matchingReports?: Array<{
+      id: string;
+      reportedMessage: string;
+      category: string | null;
+      country: string | null;
+      userEmail: string | null;
+      createdAt: string;
+    }>;
+  };
   error?: string;
 }
 

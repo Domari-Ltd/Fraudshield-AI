@@ -20,6 +20,10 @@ model ScamCheck {
   confidenceLevel    String
   disclaimer         String
   sources            String?    // JSON array string of found web sources/references
+  hasImage           Boolean    @default(false)
+  extractedText      String?
+  visualIndicators   String?    // JSON array string
+  decisivenessFactor String?
   createdAt          DateTime   @default(now())
   feedback           Feedback[]
 }

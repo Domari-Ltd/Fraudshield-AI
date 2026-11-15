@@ -1,36 +1,96 @@
 import { NextRequest, NextResponse } from "next/server";
-import { analyzeScamText } from "@/lib/gemini";
+import { analyzeScam } from "@/lib/gemini";
 import { prisma } from "@/lib/db";
 import { AnalyzeRequest, MessageType } from "@/types/fraudshield";
 
 export const maxDuration = 90; // seconds — needed for Gemini retry waits
 
-
 export async function POST(req: NextRequest) {
   try {
     const body: AnalyzeRequest = await req.json();
-    const { inputText, selectedType } = body;
+    const { inputText, imageBase64, imageMimeType, selectedType } = body;
 
-    if (!inputText || inputText.trim().length < 10) {
+    const hasImage = Boolean(imageBase64 && imageBase64.trim().length > 50);
+    const textContent = (inputText || "").trim();
+
+    if (!hasImage && (!textContent || textContent.length < 10)) {
       return NextResponse.json(
-        { success: false, error: "Please provide a message with at least 10 characters." },
+        { success: false, error: "Please upload an image/screenshot or provide text with at least 10 characters." },
         { status: 400 }
       );
     }
 
-    if (inputText.trim().length > 10000) {
+    if (textContent.length > 10000) {
       return NextResponse.json(
-        { success: false, error: "Message is too long. Please limit to 10,000 characters." },
+        { success: false, error: "Text exceeds maximum limit of 10,000 characters." },
         { status: 400 }
       );
     }
 
-    const analysis = await analyzeScamText(
-      inputText.trim(),
-      (selectedType as MessageType) ?? "unknown"
-    );
+    // 1. DYNAMIC THREAT MEMORY & CONTINUOUS IN-CONTEXT LEARNING
+    // Retrieve historical threat records and image scans from the database to train the AI
+    let learnedThreatCount = 0;
+    const learnedThreatExamples: Array<{ snippet: string; category?: string | null }> = [];
 
-    // Query latest community threat reports to find overlapping matches
+    try {
+      const [totalReports, totalChecks, sampleReports, sampleChecks] = await Promise.all([
+        prisma.scamReport.count().catch(() => 0),
+        prisma.scamCheck.count().catch(() => 0),
+        prisma.scamReport.findMany({
+          take: 6,
+          orderBy: { createdAt: "desc" },
+          select: { reportedMessage: true, category: true },
+        }).catch(() => []),
+        prisma.scamCheck.findMany({
+          take: 6,
+          where: { riskScore: { gte: 70 } },
+          orderBy: { createdAt: "desc" },
+          select: { inputText: true, scamCategory: true, extractedText: true },
+        }).catch(() => []),
+      ]);
+
+      learnedThreatCount = (totalReports || 0) + (totalChecks || 0);
+
+      // Add community reported scams into learned memory
+      for (const r of sampleReports) {
+        if (r.reportedMessage) {
+          learnedThreatExamples.push({
+            snippet: r.reportedMessage,
+            category: r.category,
+          });
+        }
+      }
+
+      // Add previously verified scans (including image OCRs) into learned memory
+      for (const c of sampleChecks) {
+        const snippet = c.extractedText || c.inputText;
+        if (snippet) {
+          learnedThreatExamples.push({
+            snippet,
+            category: c.scamCategory,
+          });
+        }
+      }
+    } catch (memError) {
+      console.error("Non-blocking threat memory retrieval note:", memError);
+    }
+
+    // 2. RUN MULTIMODAL GEMINI SCANNER
+    const analysis = await analyzeScam({
+      text: textContent,
+      image: hasImage
+        ? {
+            base64: imageBase64!,
+            mimeType: imageMimeType || "image/jpeg",
+          }
+        : undefined,
+      messageType: (selectedType as MessageType) ?? "unknown",
+      learnedThreatCount,
+      learnedThreatExamples,
+    });
+
+    // 3. OVERLAP SEARCH WITH COMMUNITY THREAT DATABASE
+    // Evaluate matching threats using both user text and image OCR extracted text
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let matchingReports: any[] = [];
     try {
@@ -42,12 +102,13 @@ export async function POST(req: NextRequest) {
       const STOP_WORDS = new Set([
         "this", "that", "with", "from", "your", "have", "will", "here", "they", "been",
         "please", "would", "about", "there", "their", "what", "when", "where", "which",
-        "should", "could", "would", "about", "more", "some", "other", "than", "then",
+        "should", "could", "about", "more", "some", "other", "than", "then",
         "them", "were", "went", "once", "only", "also"
       ]);
 
       const cleanText = (t: string) => t.toLowerCase().replace(/[^\w\s]/g, " ");
-      const inputNormalized = cleanText(inputText.trim());
+      const combinedInput = `${textContent} ${analysis.extracted_text || ""}`.trim();
+      const inputNormalized = cleanText(combinedInput);
       const inputWords = new Set(
         inputNormalized
           .split(/\s+/)
@@ -58,16 +119,16 @@ export async function POST(req: NextRequest) {
         const reportMsg = report.reportedMessage;
         const reportNormalized = cleanText(reportMsg);
 
-        // 1. Substring matches
+        // Substring match
         if (
-          (inputText.trim().length >= 20 && reportMsg.toLowerCase().includes(inputText.trim().toLowerCase())) ||
-          (reportMsg.length >= 20 && inputText.trim().toLowerCase().includes(reportMsg.toLowerCase()))
+          (combinedInput.length >= 20 && reportMsg.toLowerCase().includes(combinedInput.toLowerCase())) ||
+          (reportMsg.length >= 20 && combinedInput.toLowerCase().includes(reportMsg.toLowerCase()))
         ) {
           matchingReports.push(report);
           continue;
         }
 
-        // 2. Keyword overlap match
+        // Keyword overlap match
         const reportWords = reportNormalized
           .split(/\s+/)
           .filter(w => w.length >= 4 && !STOP_WORDS.has(w));
@@ -79,23 +140,22 @@ export async function POST(req: NextRequest) {
           }
         }
 
-        // 3 meaningful shared keywords indicate a threat vector match
         if (overlapCount >= 3) {
           matchingReports.push(report);
         }
       }
 
-      // Keep only top 4 matches
       matchingReports = matchingReports.slice(0, 4);
     } catch (searchError) {
       console.error("Non-blocking DB search error for community threats:", searchError);
     }
 
+    // 4. LOG SCAN RECORD TO DATABASE TO CONTINUOUSLY TRAIN THE NETWORK
     let recordId = "temp-" + Math.random().toString(36).substring(2, 15);
     try {
       const record = await prisma.scamCheck.create({
         data: {
-          inputText: inputText.trim(),
+          inputText: textContent || analysis.extracted_text || "Image scan submission",
           selectedType: selectedType ?? null,
           riskScore: analysis.risk_score,
           riskLevel: analysis.risk_level,
@@ -106,12 +166,16 @@ export async function POST(req: NextRequest) {
           confidenceLevel: analysis.confidence_level,
           sources: JSON.stringify(analysis.sources),
           disclaimer: analysis.disclaimer,
+          hasImage,
+          extractedText: analysis.extracted_text || null,
+          visualIndicators: JSON.stringify(analysis.visual_indicators || []),
+          decisivenessFactor: analysis.decisiveness_factor || null,
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } as any,
       });
       recordId = record.id;
     } catch (dbError) {
-      console.error("Non-blocking DB logging error (typical in read-only serverless filesystems like Vercel):", dbError);
+      console.error("Non-blocking DB logging note:", dbError);
     }
 
     return NextResponse.json({
@@ -119,6 +183,7 @@ export async function POST(req: NextRequest) {
       data: {
         id: recordId,
         ...analysis,
+        has_image: hasImage,
         matchingReports,
       },
     });
