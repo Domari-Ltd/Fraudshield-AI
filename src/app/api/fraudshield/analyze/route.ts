@@ -41,7 +41,8 @@ export async function POST(req: NextRequest) {
           orderBy: { createdAt: "desc" },
           select: { reportedMessage: true, category: true },
         }).catch(() => []),
-        prisma.scamCheck.findMany({
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (prisma.scamCheck as any).findMany({
           take: 6,
           where: { riskScore: { gte: 70 } },
           orderBy: { createdAt: "desc" },
@@ -80,9 +81,9 @@ export async function POST(req: NextRequest) {
       text: textContent,
       image: hasImage
         ? {
-            base64: imageBase64!,
-            mimeType: imageMimeType || "image/jpeg",
-          }
+          base64: imageBase64!,
+          mimeType: imageMimeType || "image/jpeg",
+        }
         : undefined,
       messageType: (selectedType as MessageType) ?? "unknown",
       learnedThreatCount,

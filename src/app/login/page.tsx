@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
-import { ArrowRight, Loader2, AlertCircle, CheckCircle2, Lock, Mail } from "lucide-react";
+import { ArrowRight, Loader2, AlertCircle, Lock, Mail } from "lucide-react";
 import BrainChargerLogo from "@/components/BrainChargerLogo";
 
 export default function LoginPage() {

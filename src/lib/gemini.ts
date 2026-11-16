@@ -27,7 +27,6 @@ function sleep(ms: number) {
 function stripEmojis(text: string): string {
   if (!text) return "";
   return text
-    // eslint-disable-next-line no-control-regex
     .replace(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{1F1E0}-\u{1F1FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F900}-\u{1F9FF}\u{1FA70}-\u{1FAFF}]/gu, "")
     .replace(/\s{2,}/g, " ")
     .trim();
@@ -113,12 +112,12 @@ export async function analyzeScam(options: AnalyzeScamOptions): Promise<ScamAnal
       ? `ADAPTIVE THREAT TRAINING MEMORY (${learnedThreatCount} historical cases indexed):
 FraudShield's adaptive network has accumulated verified scam patterns and image scans. Use these precedents to train your decision:
 ${learnedThreatExamples
-  .slice(0, 6)
-  .map(
-    (ex, idx) =>
-      `[Precedent #${idx + 1}] Type: ${ex.category || "Scam"} | Pattern: "${ex.snippet.slice(0, 160).replace(/\n/g, " ")}"`
-  )
-  .join("\n")}
+        .slice(0, 6)
+        .map(
+          (ex, idx) =>
+            `[Precedent #${idx + 1}] Type: ${ex.category || "Scam"} | Pattern: "${ex.snippet.slice(0, 160).replace(/\n/g, " ")}"`
+        )
+        .join("\n")}
 
 DECISIVENESS & CONTINUOUS LEARNING DIRECTIVE:
 1. As more screenshots and scam samples are entered into FraudShield, the model's decisiveness and specificity must increase.
@@ -232,9 +231,9 @@ CRITICAL RULES:
   parsed.learned_patterns_count = learnedThreatCount;
   parsed.decisiveness_factor = stripEmojis(
     parsed.decisiveness_factor ||
-      (parsed.risk_score > 70
-        ? "96% decisive - Grounded by historical threat memory"
-        : "Standard verification decisive rating")
+    (parsed.risk_score > 70
+      ? "96% decisive - Grounded by historical threat memory"
+      : "Standard verification decisive rating")
   );
   parsed.matched_learned_patterns = (parsed.matched_learned_patterns || []).map(stripEmojis).filter(Boolean);
 
