@@ -112,12 +112,12 @@ export async function analyzeScam(options: AnalyzeScamOptions): Promise<ScamAnal
       ? `ADAPTIVE THREAT TRAINING MEMORY (${learnedThreatCount} historical cases indexed):
 FraudShield's adaptive network has accumulated verified scam patterns and image scans. Use these precedents to train your decision:
 ${learnedThreatExamples
-  .slice(0, 6)
-  .map(
-    (ex, idx) =>
-      `[Precedent #${idx + 1}] Type: ${ex.category || "Scam"} | Pattern: "${ex.snippet.slice(0, 160).replace(/\n/g, " ")}"`
-  )
-  .join("\n")}
+        .slice(0, 6)
+        .map(
+          (ex, idx) =>
+            `[Precedent #${idx + 1}] Type: ${ex.category || "Scam"} | Pattern: "${ex.snippet.slice(0, 160).replace(/\n/g, " ")}"`
+        )
+        .join("\n")}
 
 DECISIVENESS & CONTINUOUS LEARNING DIRECTIVE:
 1. As more screenshots and scam samples are entered into FraudShield, the model's decisiveness and specificity must increase.
@@ -231,9 +231,9 @@ CRITICAL RULES:
   parsed.learned_patterns_count = learnedThreatCount;
   parsed.decisiveness_factor = stripEmojis(
     parsed.decisiveness_factor ||
-      (parsed.risk_score > 70
-        ? "96% decisive - Grounded by historical threat memory"
-        : "Standard verification decisive rating")
+    (parsed.risk_score > 70
+      ? "96% decisive - Grounded by historical threat memory"
+      : "Standard verification decisive rating")
   );
   parsed.matched_learned_patterns = (parsed.matched_learned_patterns || []).map(stripEmojis).filter(Boolean);
 

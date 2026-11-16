@@ -26,7 +26,7 @@ export default function FraudShieldNav() {
     const supabase = createClient();
     supabase.auth.getUser().then(({ data }) => {
       setUser(data.user);
-    }).catch(() => {});
+    }).catch(() => { });
 
     const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null);

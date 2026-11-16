@@ -81,9 +81,9 @@ export async function POST(req: NextRequest) {
       text: textContent,
       image: hasImage
         ? {
-            base64: imageBase64!,
-            mimeType: imageMimeType || "image/jpeg",
-          }
+          base64: imageBase64!,
+          mimeType: imageMimeType || "image/jpeg",
+        }
         : undefined,
       messageType: (selectedType as MessageType) ?? "unknown",
       learnedThreatCount,
