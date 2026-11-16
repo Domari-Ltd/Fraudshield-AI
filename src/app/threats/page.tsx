@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import {
   Terminal,
-  Activity,
   Search,
   Filter,
   Calendar,
@@ -101,8 +100,41 @@ export default function ThreatsPage() {
 
   // Mount logic - fetch reports on load and when category changes
   useEffect(() => {
-    fetchReports(search, category);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    let ignore = false;
+    const fetchOnMount = async () => {
+      try {
+        const qParams = new URLSearchParams();
+        if (category) qParams.append("category", category);
+
+        const res = await fetch(`/api/fraudshield/complaints?${qParams.toString()}`);
+        if (!res.ok) {
+          throw new Error(`Server error (${res.status}). Please try again.`);
+        }
+        const result = await res.json();
+        if (!ignore) {
+          if (!result.success) {
+            throw new Error(result.error || "Unable to load threat reports.");
+          }
+          setReports(result.data || []);
+        }
+      } catch (err) {
+        if (!ignore) {
+          setError(
+            err instanceof Error
+              ? err.message
+              : "Unable to load threat reports. Please check your connection and try again."
+          );
+        }
+      } finally {
+        if (!ignore) {
+          setLoading(false);
+        }
+      }
+    };
+    fetchOnMount();
+    return () => {
+      ignore = true;
+    };
   }, [category]);
 
   const handleSearchSubmit = (e: React.FormEvent) => {

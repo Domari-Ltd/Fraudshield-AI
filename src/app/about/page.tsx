@@ -1,5 +1,4 @@
 import {
-  AlertTriangle,
   GraduationCap,
   Briefcase,
   Building2,

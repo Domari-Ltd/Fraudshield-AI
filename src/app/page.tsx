@@ -1,6 +1,5 @@
 import Link from "next/link";
 import {
-  ShieldCheck,
   ArrowRight,
   Briefcase,
   GraduationCap,
@@ -9,7 +8,6 @@ import {
   SearchCheck,
   Building2,
   FileWarning,
-  Eye,
   Database,
   Flag,
 } from "lucide-react";

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import GoogleSignInButton from "@/components/GoogleSignInButton";
-import { Flag, CheckCircle, AlertCircle, ChevronDown, Terminal, Lock } from "lucide-react";
+import { Flag, CheckCircle, AlertCircle, ChevronDown, Lock } from "lucide-react";
 
 const scamCategories = [
   "Fake job",

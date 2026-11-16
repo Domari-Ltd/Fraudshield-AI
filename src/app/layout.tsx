@@ -94,7 +94,7 @@ export default function RootLayout({
             </div>
 
             {/* Bottom Row */}
-            <div className="border-t border-[#166534] pt-6 flex items-center justify-between text-xs text-white/80">
+            <div className="border-t border-[#084E2A] pt-6 flex items-center justify-between text-xs text-white/80">
               <p>© 2026 FraudShield</p>
             </div>
           </div>

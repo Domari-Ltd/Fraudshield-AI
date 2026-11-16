@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Mail, Shield, MessageSquare, ArrowRight, HelpCircle } from "lucide-react";
+import { Mail, Shield, ArrowRight, HelpCircle } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Contact — FraudShield",

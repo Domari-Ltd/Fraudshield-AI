@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X, ArrowRight, User as UserIcon } from "lucide-react";
+import { Menu, X, ArrowRight } from "lucide-react";
 import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import BrainChargerLogo from "@/components/BrainChargerLogo";
@@ -21,9 +21,9 @@ export default function FraudShieldNav() {
   const [mobileOpen, setMobileOpen] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [user, setUser] = useState<any>(null);
-  const supabase = createClient();
 
   useEffect(() => {
+    const supabase = createClient();
     supabase.auth.getUser().then(({ data }) => {
       setUser(data.user);
     }).catch(() => {});
@@ -38,18 +38,19 @@ export default function FraudShieldNav() {
   }, []);
 
   const handleSignOut = async () => {
+    const supabase = createClient();
     await supabase.auth.signOut();
     setUser(null);
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-[#E5E0D8] bg-white/95 backdrop-blur-md transition-all">
+    <header className="sticky top-0 z-50 w-full border-b border-[#084E2A] bg-[#0B6A3B] shadow-sm transition-all">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
 
         {/* Clean minimal app brandmark - pure SVG logo, no picture box */}
         <Link href="/" className="flex items-center gap-2.5 group cursor-pointer">
-          <BrainChargerLogo className="h-7 w-7 text-[#0B6A3B] group-hover:scale-105 transition-transform shrink-0" />
-          <span className="text-lg font-extrabold tracking-tight text-black">
+          <BrainChargerLogo className="h-7 w-7 text-white group-hover:scale-105 transition-transform shrink-0" />
+          <span className="text-lg font-extrabold tracking-tight text-white">
             FraudShield
           </span>
         </Link>
@@ -65,8 +66,8 @@ export default function FraudShieldNav() {
                 className={cn(
                   "text-xs font-bold transition-colors cursor-pointer",
                   isActive
-                    ? "text-[#0B6A3B]"
-                    : "text-black hover:text-[#0B6A3B]"
+                    ? "text-[#A7F3D0] underline underline-offset-8 decoration-2 decoration-[#A7F3D0]"
+                    : "text-white/85 hover:text-white"
                 )}
               >
                 {link.label}
@@ -79,13 +80,13 @@ export default function FraudShieldNav() {
         <div className="hidden md:flex items-center gap-3">
           {user ? (
             <div className="flex items-center gap-2.5">
-              <span className="text-xs font-semibold text-black truncate max-w-[120px]">
+              <span className="text-xs font-semibold text-white truncate max-w-[120px]">
                 {user.user_metadata?.full_name || user.email?.split("@")[0]}
               </span>
               <button
                 type="button"
                 onClick={handleSignOut}
-                className="text-xs font-bold text-black/70 hover:text-[#0B6A3B] transition-colors cursor-pointer"
+                className="text-xs font-bold text-white/80 hover:text-white hover:underline transition-colors cursor-pointer"
               >
                 Log Out
               </button>
@@ -94,13 +95,13 @@ export default function FraudShieldNav() {
             <div className="flex items-center gap-2">
               <Link
                 href="/login"
-                className="text-xs font-bold text-black hover:text-[#0B6A3B] transition-colors px-2 py-1 cursor-pointer"
+                className="text-xs font-bold text-white/90 hover:text-white transition-colors px-2 py-1 cursor-pointer"
               >
                 Log In
               </Link>
               <Link
                 href="/signup"
-                className="text-xs font-bold text-[#0B6A3B] hover:underline px-2 py-1 cursor-pointer"
+                className="text-xs font-bold text-[#A7F3D0] hover:text-white hover:underline px-2 py-1 cursor-pointer"
               >
                 Sign Up
               </Link>
@@ -109,7 +110,7 @@ export default function FraudShieldNav() {
 
           <Link
             href="/contact"
-            className="btn-pine px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-xs cursor-pointer group"
+            className="bg-white text-[#0B6A3B] hover:bg-[#FAF8F5] px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-xs cursor-pointer group transition-colors"
           >
             Contact
             <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-0.5 transition-transform" />
@@ -118,7 +119,7 @@ export default function FraudShieldNav() {
 
         {/* Mobile hamburger */}
         <button
-          className="md:hidden text-black p-2 rounded-xl border border-[#E5E0D8] bg-[#FAF8F5] hover:bg-white transition-colors"
+          className="md:hidden text-white p-2 rounded-xl border border-[#084E2A] bg-[#084E2A] hover:bg-[#063A1F] transition-colors"
           onClick={() => setMobileOpen(!mobileOpen)}
           aria-label="Toggle menu"
         >
@@ -128,7 +129,7 @@ export default function FraudShieldNav() {
 
       {/* Mobile menu dropdown */}
       {mobileOpen && (
-        <div className="md:hidden border-t border-[#E5E0D8] bg-white px-4 pb-6 pt-3 shadow-lg animate-scale-in">
+        <div className="md:hidden border-t border-[#084E2A] bg-[#0B6A3B] px-4 pb-6 pt-3 shadow-xl animate-scale-in">
           <nav className="flex flex-col gap-1.5">
             {navLinks.map((link) => {
               const isActive = pathname === link.href;
@@ -140,8 +141,8 @@ export default function FraudShieldNav() {
                   className={cn(
                     "px-4 py-2.5 rounded-xl text-xs font-bold transition-all",
                     isActive
-                      ? "bg-[#0B6A3B] text-white"
-                      : "text-black hover:text-[#0B6A3B] hover:bg-[#FAF8F5]"
+                      ? "bg-[#084E2A] text-white border border-[#166534]"
+                      : "text-white/90 hover:text-white hover:bg-[#084E2A]"
                   )}
                 >
                   {link.label}
@@ -149,14 +150,14 @@ export default function FraudShieldNav() {
               );
             })}
 
-            <div className="pt-2 border-t border-[#E5E0D8] mt-2 flex flex-col gap-2">
+            <div className="pt-2 border-t border-[#084E2A] mt-2 flex flex-col gap-2">
               {user ? (
-                <div className="flex items-center justify-between px-4 py-2 bg-[#FAF8F5] rounded-xl text-xs font-bold">
+                <div className="flex items-center justify-between px-4 py-2 bg-[#084E2A] rounded-xl text-xs font-bold text-white border border-[#166534]">
                   <span>{user.email}</span>
                   <button
                     type="button"
                     onClick={handleSignOut}
-                    className="text-[#DC2626] cursor-pointer"
+                    className="text-[#FCA5A5] hover:text-white cursor-pointer"
                   >
                     Log Out
                   </button>
@@ -166,14 +167,14 @@ export default function FraudShieldNav() {
                   <Link
                     href="/login"
                     onClick={() => setMobileOpen(false)}
-                    className="px-4 py-2 rounded-xl border border-[#E5E0D8] text-xs font-bold text-center text-black"
+                    className="px-4 py-2 rounded-xl border border-[#084E2A] bg-[#084E2A] text-xs font-bold text-center text-white"
                   >
                     Log In
                   </Link>
                   <Link
                     href="/signup"
                     onClick={() => setMobileOpen(false)}
-                    className="px-4 py-2 rounded-xl bg-[#E8F5E9] text-[#0B6A3B] border border-[#A7F3D0] text-xs font-bold text-center"
+                    className="px-4 py-2 rounded-xl bg-white text-[#0B6A3B] text-xs font-bold text-center"
                   >
                     Sign Up
                   </Link>
@@ -183,7 +184,7 @@ export default function FraudShieldNav() {
               <Link
                 href="/contact"
                 onClick={() => setMobileOpen(false)}
-                className="btn-pine mt-1 px-4 py-2.5 rounded-xl text-xs font-bold text-center flex items-center justify-center gap-1.5 shadow-xs cursor-pointer"
+                className="bg-white text-[#0B6A3B] mt-1 px-4 py-2.5 rounded-xl text-xs font-bold text-center flex items-center justify-center gap-1.5 shadow-xs cursor-pointer"
               >
                 Contact
                 <ArrowRight className="h-4 w-4" />
@@ -195,4 +196,3 @@ export default function FraudShieldNav() {
     </header>
   );
 }
-
