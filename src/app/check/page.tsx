@@ -233,7 +233,7 @@ export default function CheckPage() {
           </p>
 
           {/* Adaptive Learning Telemetry Pill */}
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#0B6A3B]/10 border border-[#0B6A3B]/20 text-xs font-bold text-[#0B6A3B]">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#0A2417]/10 border border-[#0A2417]/25 text-xs font-bold text-[#0A2417]">
             <Zap className="h-3.5 w-3.5" />
             <span>Adaptive Threat Memory Active — Each scan trains the network</span>
           </div>
@@ -249,7 +249,7 @@ export default function CheckPage() {
               <select
                 value={selectedType}
                 onChange={(e) => setSelectedType(e.target.value as MessageType)}
-                className="w-full appearance-none rounded-xl border border-[#E5E0D8] bg-[#FAF8F5] px-3.5 py-2.5 text-xs sm:text-sm text-black focus:border-[#0B6A3B] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0B6A3B]/10 transition-all font-semibold cursor-pointer"
+                className="w-full appearance-none rounded-xl border border-[#E5E0D8] bg-[#FAF8F5] px-3.5 py-2.5 text-xs sm:text-sm text-black focus:border-[#0A2417] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0A2417]/10 transition-all font-semibold cursor-pointer"
               >
                 {messageTypes.map((type) => (
                   <option key={type.value} value={type.value} className="bg-white text-black font-medium">
@@ -265,7 +265,7 @@ export default function CheckPage() {
           <div>
             <div className="flex items-center justify-between mb-1.5">
               <label className="text-xs font-bold text-black flex items-center gap-1.5">
-                <ImageIcon className="h-3.5 w-3.5 text-[#0B6A3B]" />
+                <ImageIcon className="h-3.5 w-3.5 text-[#0A2417]" />
                 Screenshot / Image (Vision & OCR)
               </label>
               <span className="text-[11px] font-bold text-black">
@@ -283,7 +283,7 @@ export default function CheckPage() {
 
             {selectedImage ? (
               /* Image Attached Preview Card */
-              <div className="relative p-3 rounded-xl border border-[#0B6A3B] bg-[#0B6A3B]/5 flex items-center justify-between gap-3 animate-fade-in">
+              <div className="relative p-3 rounded-xl border border-[#0A2417] bg-[#0A2417]/5 flex items-center justify-between gap-3 animate-fade-in">
                 <div className="flex items-center gap-3 min-w-0">
                   <div className="h-14 w-14 rounded-lg overflow-hidden border border-[#E5E0D8] bg-white shrink-0">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -325,12 +325,12 @@ export default function CheckPage() {
                 className={cn(
                   "p-5 rounded-xl border-2 border-dashed text-center cursor-pointer transition-all",
                   isDragging
-                    ? "border-[#0B6A3B] bg-[#0B6A3B]/5"
-                    : "border-[#E5E0D8] bg-[#FAF8F5] hover:border-[#0B6A3B] hover:bg-white"
+                    ? "border-[#0A2417] bg-[#0A2417]/5"
+                    : "border-[#E5E0D8] bg-[#FAF8F5] hover:border-[#0A2417] hover:bg-white"
                 )}
               >
                 <div className="flex justify-center mb-2">
-                  <UploadCloud className="h-6 w-6 text-[#0B6A3B]" />
+                  <UploadCloud className="h-6 w-6 text-[#0A2417]" />
                 </div>
                 <p className="text-xs font-bold text-black">
                   Click to upload screenshot, drag and drop, or press <kbd className="px-1.5 py-0.5 bg-white border border-[#E5E0D8] rounded font-mono text-[10px]">Ctrl+V</kbd>
@@ -346,7 +346,7 @@ export default function CheckPage() {
           <div>
             <div className="flex justify-between items-end mb-1.5">
               <label className="text-xs font-bold text-black flex items-center gap-1.5">
-                <FileText className="h-3.5 w-3.5 text-[#0B6A3B]" />
+                <FileText className="h-3.5 w-3.5 text-[#0A2417]" />
                 {selectedImage ? "Accompanying Notes (Optional)" : "Message Content"}
               </label>
               <div className={cn("text-xs font-bold", isOverLimit ? "text-[#DC2626]" : "text-black")}>
@@ -361,7 +361,7 @@ export default function CheckPage() {
                   ? "Add any notes or context about this screenshot (optional)..."
                   : "Paste suspicious email, SMS, or job offer here..."
               }
-              className="min-h-[140px] w-full rounded-xl border border-[#E5E0D8] bg-[#FAF8F5] p-3.5 text-black text-xs sm:text-sm placeholder:text-black/50 focus:border-[#0B6A3B] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0B6A3B]/10 transition-all leading-relaxed font-sans resize-y font-medium"
+              className="min-h-[140px] w-full rounded-xl border border-[#E5E0D8] bg-[#FAF8F5] p-3.5 text-black text-xs sm:text-sm placeholder:text-black/50 focus:border-[#0A2417] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0A2417]/10 transition-all leading-relaxed font-sans resize-y font-medium"
             />
           </div>
 
@@ -384,7 +384,7 @@ export default function CheckPage() {
                 <button
                   type="button"
                   onClick={() => loadSampleImage("Fake SMS Notice", samplePostalSvg)}
-                  className="rounded-xl border border-[#0B6A3B]/40 bg-[#0B6A3B]/5 px-3 py-1.5 text-xs font-bold text-[#0B6A3B] hover:bg-[#0B6A3B]/10 transition-all cursor-pointer shadow-2xs flex items-center gap-1.5"
+                  className="rounded-xl border border-[#0A2417]/30 bg-[#0A2417]/5 px-3 py-1.5 text-xs font-bold text-[#0A2417] hover:bg-[#0A2417]/10 transition-all cursor-pointer shadow-2xs flex items-center gap-1.5"
                 >
                   <ImageIcon className="h-3.5 w-3.5" />
                   Postal SMS Screenshot
@@ -392,7 +392,7 @@ export default function CheckPage() {
                 <button
                   type="button"
                   onClick={() => loadSampleImage("Crypto Scam Flyer", sampleCryptoSvg)}
-                  className="rounded-xl border border-[#0B6A3B]/40 bg-[#0B6A3B]/5 px-3 py-1.5 text-xs font-bold text-[#0B6A3B] hover:bg-[#0B6A3B]/10 transition-all cursor-pointer shadow-2xs flex items-center gap-1.5"
+                  className="rounded-xl border border-[#0A2417]/30 bg-[#0A2417]/5 px-3 py-1.5 text-xs font-bold text-[#0A2417] hover:bg-[#0A2417]/10 transition-all cursor-pointer shadow-2xs flex items-center gap-1.5"
                 >
                   <ImageIcon className="h-3.5 w-3.5" />
                   Crypto Bot Screenshot
@@ -404,7 +404,7 @@ export default function CheckPage() {
                     key={msg.label}
                     type="button"
                     onClick={() => setText(msg.text)}
-                    className="rounded-xl border border-[#E5E0D8] bg-[#FAF8F5] px-3 py-1.5 text-xs font-bold text-black hover:bg-white hover:border-[#0B6A3B] transition-all cursor-pointer shadow-2xs flex items-center gap-1.5"
+                    className="rounded-xl border border-[#E5E0D8] bg-[#FAF8F5] px-3 py-1.5 text-xs font-bold text-black hover:bg-white hover:border-[#0A2417] transition-all cursor-pointer shadow-2xs flex items-center gap-1.5"
                   >
                     <FileText className="h-3 w-3 text-black" />
                     {msg.label}
@@ -452,7 +452,7 @@ export default function CheckPage() {
           {loading && (
             <div className="card-editorial rounded-2xl border border-[#E5E0D8] bg-white p-10 text-center shadow-xs animate-scale-in">
               <div className="flex justify-center mb-3">
-                <Loader2 className="h-8 w-8 text-[#0B6A3B] animate-spin" />
+                <Loader2 className="h-8 w-8 text-[#0A2417] animate-spin" />
               </div>
               <h3 className="text-sm font-bold text-black mb-1">
                 {selectedImage ? "Recognizing visual content & OCR text..." : "Scanning for scam patterns..."}

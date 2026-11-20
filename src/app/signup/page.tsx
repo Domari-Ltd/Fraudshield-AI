@@ -93,7 +93,7 @@ export default function SignupPage() {
         {/* Brand header */}
         <div className="text-center space-y-2">
           <Link href="/" className="inline-flex items-center gap-2 group mb-2">
-            <BrainChargerLogo className="h-8 w-8 text-[#0B6A3B] group-hover:scale-105 transition-transform" />
+            <BrainChargerLogo className="h-8 w-8 text-[#0A2417] group-hover:scale-105 transition-transform" />
             <span className="text-xl font-extrabold tracking-tight text-black">
               FraudShield
             </span>
@@ -111,7 +111,7 @@ export default function SignupPage() {
 
           {success ? (
             <div className="text-center py-4 space-y-3 animate-scale-in">
-              <div className="h-12 w-12 rounded-full bg-[#E8F5E9] text-[#0B6A3B] flex items-center justify-center mx-auto">
+              <div className="h-12 w-12 rounded-full bg-[#E8F5E9] text-[#0A2417] flex items-center justify-center mx-auto">
                 <CheckCircle2 className="h-6 w-6" />
               </div>
               <h3 className="text-base font-bold text-black">Check your email</h3>
@@ -138,7 +138,7 @@ export default function SignupPage() {
                 className="w-full flex items-center justify-center gap-3 py-2.5 px-4 rounded-xl border border-[#E5E0D8] bg-white hover:bg-[#FAF8F5] text-xs font-bold text-black transition-all shadow-2xs cursor-pointer disabled:opacity-50"
               >
                 {googleLoading ? (
-                  <Loader2 className="h-4 w-4 animate-spin text-[#0B6A3B]" />
+                  <Loader2 className="h-4 w-4 animate-spin text-[#0A2417]" />
                 ) : (
                   <svg className="h-4 w-4 shrink-0" viewBox="0 0 24 24">
                     <path
@@ -192,7 +192,7 @@ export default function SignupPage() {
                       onChange={(e) => setFullName(e.target.value)}
                       placeholder="Jane Doe"
                       required
-                      className="w-full rounded-xl border border-[#E5E0D8] bg-[#FAF8F5] px-3.5 py-2.5 pl-9 text-xs text-black placeholder:text-black/40 focus:border-[#0B6A3B] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0B6A3B]/10 transition-all font-medium"
+                      className="w-full rounded-xl border border-[#E5E0D8] bg-[#FAF8F5] px-3.5 py-2.5 pl-9 text-xs text-black placeholder:text-black/40 focus:border-[#0A2417] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0A2417]/10 transition-all font-medium"
                     />
                     <User className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-black/50" />
                   </div>
@@ -209,7 +209,7 @@ export default function SignupPage() {
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="name@example.com"
                       required
-                      className="w-full rounded-xl border border-[#E5E0D8] bg-[#FAF8F5] px-3.5 py-2.5 pl-9 text-xs text-black placeholder:text-black/40 focus:border-[#0B6A3B] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0B6A3B]/10 transition-all font-medium"
+                      className="w-full rounded-xl border border-[#E5E0D8] bg-[#FAF8F5] px-3.5 py-2.5 pl-9 text-xs text-black placeholder:text-black/40 focus:border-[#0A2417] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0A2417]/10 transition-all font-medium"
                     />
                     <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-black/50" />
                   </div>
@@ -227,7 +227,7 @@ export default function SignupPage() {
                       placeholder="••••••••"
                       required
                       minLength={6}
-                      className="w-full rounded-xl border border-[#E5E0D8] bg-[#FAF8F5] px-3.5 py-2.5 pl-9 text-xs text-black placeholder:text-black/40 focus:border-[#0B6A3B] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0B6A3B]/10 transition-all font-medium"
+                      className="w-full rounded-xl border border-[#E5E0D8] bg-[#FAF8F5] px-3.5 py-2.5 pl-9 text-xs text-black placeholder:text-black/40 focus:border-[#0A2417] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0A2417]/10 transition-all font-medium"
                     />
                     <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-black/50" />
                   </div>
@@ -259,7 +259,7 @@ export default function SignupPage() {
         {/* Footer switch to sign in */}
         <p className="text-center text-xs text-black font-medium">
           Already have an account?{" "}
-          <Link href="/login" className="font-bold text-[#0B6A3B] hover:underline">
+          <Link href="/login" className="font-bold text-[#0A2417] hover:underline">
             Log in here
           </Link>
         </p>
